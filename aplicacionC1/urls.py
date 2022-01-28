@@ -2,8 +2,6 @@ from django.urls import path, include, re_path
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 
-from aplicacionC1 import primerComponente
-
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -24,5 +22,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
     re_path(r'^api/v1/login/', include('login.urls')),
-    re_path(r'^api/v1/primerComponente/', include('primerComponente.urls')),
+    re_path(r'^api/v1/primer_componente/', include('primerComponente.urls')),
+    re_path(r'^api/v1/registro/', include('register.urls')),
 ]

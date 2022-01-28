@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 
 class LoginAuth (ObtainAuthToken):
-    def post (self, request, *args, **kwargs):
+    def post (self, request):
         
         serializer=self.serializer_class(data=request.data,context={'request':request})
         serializer.is_valid(raise_exception=True)

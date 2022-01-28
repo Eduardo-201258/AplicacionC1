@@ -6,5 +6,4 @@ from login.views import LoginAuth
 
 urlpatterns = [
     re_path(r'^', LoginAuth.as_view()),
-    
 ]
