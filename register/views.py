@@ -1,22 +1,21 @@
-from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.authtoken.models import Token
-
+from django.urls import is_valid_path
 from rest_framework.response import Response
 from register.models import RegisterUsers
 from register.serializers import TablaUsers
+from rest_framework import status
+from rest_framework.views import APIView
 
 # Create your views here.
-class RegisterView(ObtainAuthToken):
-    def put(self, request, *args, **kwargs):
-        data = RegisterUsers.objects.all()
-        serializer = TablaUsers(data, many=True, context={'request':request})
-        user=serializer.validated_data['user']
-        token,create=Token.objects.get_or_create(user=user)
-        return Response(
-            {
-            'token':token.key,
-            'usuario':data.usuario,
-            'correo':data.correo,
-            }
-        )
+class RegisterView(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = RegisterUsers.objects.all()
+        serializer = TablaUsers(queryset, many=True, context={'request':request})
+        return Response(serializer.data)
         
+    def post(self, request, format=None):
+        serializer = TablaUsers(data=request.data, context ={'request':request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

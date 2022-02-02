@@ -32,6 +32,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    'login',
+    'primerComponente',
+    'register',
     #Libreria
     'rest_framework',
 ]
@@ -71,12 +74,12 @@ WSGI_APPLICATION = 'aplicacionC1.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 DATABASES = {
    'default': {
-        'ENGINE': env('ENGINE'),  
+        'ENGINE': env('ENGINE'),
         'NAME': env('NAME'),
         'USER': env('USER'),
         'PASSWORD': env('PASSWORD'),
         'HOST': env('HOST'),
-        'PORT':  env('PORT')
+        'PORT':  env('PORT'),
     } 
 }
 
@@ -103,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-mx'
 
 TIME_ZONE = 'UTC'
 
@@ -122,7 +125,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-try:
-    from aplicacionC1.local_settings import *
-except ImportError:
-    pass
+#try:
+#    from aplicacionC1.local_settings import *
+#except ImportError:
+ #   pass
