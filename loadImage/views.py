@@ -11,7 +11,6 @@ from loadImage.serializers import TablaImg
 from primerComponente.views import ResponseCustom
 
 #Variables Globales
-
 responseOk = '{"messages":"success"}'
 responseOk = json.loads(responseOk)
 
@@ -21,6 +20,7 @@ responseBad = json.loads(responseBad)
 # Create your views here.
 class ViewListImg(APIView):
     def get(self, request, format=None):
+        
         queryset = ImgModel.objects.all()
         serializer = TablaImg(queryset, many=True, context={'request':request})
         return ResponseCustom.response_custom(serializer.data, responseOk, status.HTTP_200_OK)
@@ -28,16 +28,14 @@ class ViewListImg(APIView):
     def post(self, request, format=None):
         
         format_split = str(request.data['url_img']).split('.')
-        
         request.data['name_img'] = format_split[0]
         request.data['format_img'] = format_split[1]
         
         serializer = TablaImg(data=request.data)
-    
+
         if serializer.is_valid():
             serializer.save()
             return ResponseCustom.response_custom(serializer.data, responseOk, status.HTTP_201_CREATED)
-        
         else:
             return ResponseCustom.response_custom(serializer.errors, responseBad, status.HTTP_400_BAD_REQUEST)
 
@@ -51,8 +49,14 @@ class ViewDetailImg(APIView):
         
     def put(self, request, pk, format=None):
         idResponse = self.get_object(pk)
+        
         if idResponse != 404:
+            format_split = str(request.data['url_img']).split('.')
+            request.data['name_img'] = format_split[0]
+            request.data['format_img'] = format_split[1]
+            
             serializer = TablaImg(idResponse, data=request.data, context={'request': request})
+            
             if serializer.is_valid():
                 serializer.save()
                 return ResponseCustom.response_custom(serializer.data, responseOk, status.HTTP_200_OK)
