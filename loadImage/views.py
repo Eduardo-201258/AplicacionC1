@@ -5,7 +5,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from loadImage.models import ImgModel
 from loadImage.serializers import TablaImg
-import json
 
 # Create your views here.
 class ViewListImg(APIView):
@@ -16,10 +15,10 @@ class ViewListImg(APIView):
 
     def post(self, request, format=None):
         
-        parseo = str(request.data['url_img'])
-        format_split = parseo.split(sep='.')
         
-        request.data['name_img'] = parseo
+        format_split = str(request.data['url_img']).split(sep='.')
+        
+        request.data['name_img'] = format_split[0]
         request.data['format_img'] = format_split[1]
         
         serializer = TablaImg(data=request.data, context ={'request':request })
@@ -38,7 +37,19 @@ class ViewDetailImg(APIView):
             return ImgModel.objects.get(pk=pk)
         except ImgModel.DoesNotExist:
             return 404
-
+        
+    def put(self, request, pk, format=None):
+        idResponse = self.get_object(pk)
+        if idResponse != 404:
+            serializer = TablaImg(idResponse, data=request.data, context={'request': request})
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response('Id no encontrada')
+        
     def delete(self, request, pk, format=None):
         idResponse = self.get_object(pk)
         if idResponse != 404:
