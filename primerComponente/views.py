@@ -22,13 +22,14 @@ class PrimerViewList(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+        
 class PrimerViewDetail(APIView):
     def get_object(self, pk):
         try:
             return PrimerModelo.objects.get(pk=pk)
         except PrimerModelo.DoesNotExist:
             return 404
-        
+    
     def get(self, request, pk, format=None):
         idResponse = self.get_object(pk)
         if idResponse != 404:
@@ -51,11 +52,10 @@ class PrimerViewDetail(APIView):
     def delete(self, request, pk, format=None):
         idResponse = self.get_object(pk)
         if idResponse != 404:
-            serializer = PrimerTablaSerializer(idResponse, data=request.data, context={'request': request})
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+            idResponse.delete()
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response('Id no encontrada')
+
+    def response_custom(data, content_type, status):
+        ...
