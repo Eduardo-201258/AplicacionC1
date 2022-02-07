@@ -1,4 +1,3 @@
-from django.urls import is_valid_path
 from rest_framework.response import Response
 from register.models import RegisterUsers
 from register.serializers import TablaUsers
@@ -12,10 +11,10 @@ class RegisterView(APIView):
         serializer = TablaUsers(queryset, many=True, context={'request':request})
         return Response(serializer.data)
         
-    def post(self, request, format=None):
-        serializer = TablaUsers(data=request.data, context ={'request':request})
+    def post(self, request,  *args, **kwargs):
+        serializer = TablaUsers(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        else: 
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
